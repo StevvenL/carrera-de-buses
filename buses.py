@@ -2,99 +2,97 @@ import os
 import time
 import random
 
-# Función para limpiar la terminal en cada actualización
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
-# Función para imprimir el bus en una posición específica
+# Función para limpiar la pantalla
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+
+# Dibujar el bus en una posición específica
 def draw_bus(position, track_length):
     bus = [
-    "  ____________________",
-    " |                    )___",
-    "| [] [] [] [] [] [] []    |",
-    "|_________________________|",
-    "  O                  O",
+        "  ____________________",
+        " |                    )___",
+        "| [] [] [] [] [] [] []    |",
+        "|_________________________|",
+        "  O                  O",
     ]
-    # Añadir el espacio antes del bus para simular el movimiento
     for line in bus:
         print(" " * position + line)
-    # Dibujar la línea del suelo y la línea de meta
     ground = " " * position + "-" * (track_length - position) + "| META"
     print(ground)
 
-# Función para imprimir la carrera con los buses en sus posiciones
-def print_race(bus1_pos, bus2_pos, track_length):
-    # Limpiar pantalla
+
+# Mostrar el estado de la carrera
+def print_race(bus1_pos, bus2_pos, track_length, bus1_name, bus2_name):
     clear_screen()
-    
-    # Imprimir Bus 1
-    print("Carril 1:")
+    print(f"{bus1_name} (Carril 1):")
     draw_bus(bus1_pos, track_length)
-    
-    # Separador entre carriles
     print("\n" * 2)
-    
-    # Imprimir Bus 2
-    print("Carril 2:")
+    print(f"{bus2_name} (Carril 2):")
     draw_bus(bus2_pos, track_length)
 
-# Función para mostrar el mensaje "TE AMO"
+    # Mostrar quién va ganando
+    print("\n")
+    if bus1_pos > bus2_pos:
+        print(f"🏁 ¡{bus1_name} va ganando!")
+    elif bus2_pos > bus1_pos:
+        print(f"🏁 ¡{bus2_name} va ganando!")
+    else:
+        print("🏁 ¡Van empatados!")
+
+
+# Mostrar mensaje de amor
 def show_love_message():
     clear_screen()
     love_message = [
-    " _       _          _________   ___             ___   _________ ",
-    "| |     | |        |  _____  |  \\\\\\\\           ////  |  _______) ",
-    "| |     | |        | |     | |   \\\\\\\\         ////   | |  ",
-    "| |     | |        | |     | |    \\\\\\\\       ////    | |_______   ",
-    "| |     | |        | |     | |     \\\\\\\\     ////     |  _______)   ",
-    "| |     | |        | |     | |      \\\\\\\\   ////      | |    ",
-    "| |     | |_____   | |_____| |       \\\\\\\\_////       | |_______   ",
-    "|_|     |_______|  |_________|        (_____)        |_________)    ",
-    "",
-    "                         ♥ PRINCESA ♥          ",
-]
+        "",
+        "**********************************************",
+        "*                                            *",
+        "*  ¡Gracias por jugar esta carrera divertida! *",
+        "*        Esperamos que lo hayas disfrutado   *",
+        "*                                            *",
+        "**********************************************",
+        "",
+        "                 🚍🏁🏁🚍",
+    ]
     for line in love_message:
         print(line)
-    time.sleep(5)  # Dejar el mensaje unos segundos
+    time.sleep(6)
 
-# Longitud de la pista
+
+# Configuración de la carrera
 track_length = 110
-
-# Posiciones iniciales de los buses
 bus1_pos = 0
 bus2_pos = 0
-
-# Meta: la posición final de la pista
 goal = track_length - 1
 
-# Simulación de la carrera
-while bus1_pos < goal and bus2_pos < goal:
-    # Mover los buses de manera aleatoria
-    bus1_pos += random.randint(1, 3)  # Bus 1 
-    bus2_pos += random.randint(1, 3)  # Bus 2
+# Nombres personalizados
+bus1_name = input("Ingresa el nombre del Bus 1: ")
+bus2_name = input("Ingresa el nombre del Bus 2: ")
 
-    # Asegurarse de que no sobrepasen la meta
+# Iniciar la carrera
+while bus1_pos < goal and bus2_pos < goal:
+    bus1_pos += random.randint(1, 3)
+    bus2_pos += random.randint(1, 3)
+
     bus1_pos = min(bus1_pos, goal)
     bus2_pos = min(bus2_pos, goal)
 
-    # Imprimir el estado actual de la carrera
-    print_race(bus1_pos, bus2_pos, track_length)
+    print_race(bus1_pos, bus2_pos, track_length, bus1_name, bus2_name)
+    time.sleep(0.2)
 
-    # Pausar un poco para controlar la velocidad
-    time.sleep(0.1)
-
-# Imprimir el resultado final
+# Mostrar resultado
 clear_screen()
-print_race(bus1_pos, bus2_pos, track_length)
+print_race(bus1_pos, bus2_pos, track_length, bus1_name, bus2_name)
 
-# Determinar el ganador
+print("\n" + "=" * 60)
 if bus1_pos >= goal and bus2_pos >= goal:
     print("¡Empate!")
 elif bus1_pos >= goal:
-    print("¡Bus 1 ha ganado!")
+    print(f"🎉 ¡{bus1_name} ha ganado!")
 else:
-    print("¡Bus 2 ha ganado!")
+    print(f"🎉 ¡{bus2_name} ha ganado!")
 
-# Mostrar mensaje "TE AMO"
 time.sleep(2)
 show_love_message()
